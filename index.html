@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제3회 스마트축산 AI 경진대회 제안서 - K-AgriVision (KETI 김현우)</title>
+    <style>
+        /* --- 기본 스타일 및 테마 설정 --- */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Roboto+Mono:wght@400;700&display=swap');
+        
+        :root {
+            --primary-color: #00BFFF; /* DeepSkyBlue */
+            --secondary-color: #1E90FF; /* DodgerBlue */
+            --background-color: #121212;
+            --surface-color: #1E1E1E;
+            --text-color: #EAEAEA;
+            --text-muted-color: #A0A0A0;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --danger-color: #F44336;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        
+        /* --- 네비게이션 --- */
+        nav {
+            position: sticky; top: 0;
+            background-color: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000; padding: 15px 0;
+            border-bottom: 1px solid #333;
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        nav .logo { font-weight: 700; font-size: 1.5em; color: var(--primary-color); }
+        nav ul { display: flex; list-style: none; }
+        nav ul li a {
+            color: var(--text-color); text-decoration: none;
+            padding: 10px 15px; transition: all 0.3s; border-radius: 5px;
+        }
+        nav ul li a:hover { color: #fff; background-color: var(--primary-color); }
+
+        /* --- 헤더 --- */
+        header {
+            text-align: center; padding: 120px 20px 80px;
+            background: linear-gradient(rgba(18, 18, 18, 0.8), rgba(18, 18, 18, 1)), url('https://images.unsplash.com/photo-1596701126248-f6484c453538?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        header h1 { font-size: 3.2em; margin-bottom: 20px; color: #fff; text-shadow: 0 0 20px rgba(0, 191, 255, 0.8); }
+        header p { font-size: 1.3em; color: var(--text-muted-color); max-width: 800px; margin: 0 auto; }
+        .author { margin-top: 30px; font-size: 1.1em; }
+        .author a { color: var(--primary-color); text-decoration: none; font-weight: 700; }
+
+        /* --- 섹션 및 카드 --- */
+        section {
+            padding: 80px 0; border-bottom: 1px solid #2a2a2a;
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        section.visible { opacity: 1; transform: translateY(0); }
+        h2 { font-size: 2.5em; color: var(--primary-color); margin-bottom: 40px; text-align: center; position: relative; }
+        h2::after { content: ''; display: block; width: 80px; height: 4px; background-color: var(--primary-color); margin: 20px auto 0; border-radius: 2px; }
+        h3 { font-size: 1.8em; color: #fff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--secondary-color); display: flex; align-items: center; gap: 10px; }
+        .card { background-color: var(--surface-color); padding: 30px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid var(--primary-color); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .highlight { color: var(--primary-color); font-weight: 700; }
+        
+        /* --- 테이블 --- */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        th { background-color: var(--secondary-color); color: #fff; font-weight: 500; }
+        td:first-child { font-weight: 500; color: var(--primary-color); width: 30%; }
+
+        /* --- 다이어그램 & 목업 --- */
+        .flow-diagram { display: flex; align-items: center; justify-content: space-around; background: #0d0d0d; padding: 30px; border-radius: 8px; font-family: 'Roboto Mono', monospace; text-align: center; }
+        .flow-box { background: var(--surface-color); padding: 15px; border-radius: 5px; border: 1px solid #444; }
+        .flow-arrow { color: var(--primary-color); font-size: 2em; padding: 0 20px; }
+        
+        .dashboard-mockup { background-color: #0d0d0d; border: 1px solid #333; border-radius: 8px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .kpi-card { background: var(--surface-color); padding: 20px; border-radius: 8px; }
+        .kpi-card .label { font-size: 1em; color: var(--text-muted-color); margin-bottom: 10px; }
+        .kpi-card .value { font-size: 2.2em; font-weight: bold; color: var(--primary-color); }
+        .value.success { color: var(--success-color); }
+        .value.warning { color: var(--warning-color); }
+        .farm-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .layout-map { background: var(--surface-color); padding: 20px; border-radius: 8px; text-align: center; background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23333' stroke-width='2' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); }
+        .alert-list h4 { margin-bottom: 15px; }
+        .alert-item { padding: 12px; border-bottom: 1px solid #333; cursor: pointer; transition: background-color 0.2s; }
+        .alert-item:hover { background-color: #2a2a2a; }
+        .alert-item.danger { border-left: 3px solid var(--danger-color); }
+        
+        /* --- 로드맵 --- */
+        .timeline { position: relative; padding: 20px 0; list-style: none; }
+        .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; width: 4px; background: var(--surface-color); left: 30px; margin-left: -2px; }
+        .timeline > li { margin-bottom: 20px; position: relative; padding-left: 60px; }
+        .timeline .icon { position: absolute; left: 30px; top: 0; width: 30px; height: 30px; background: var(--secondary-color); border-radius: 50%; margin-left: -15px; display: flex; justify-content: center; align-items: center; color: #fff; font-weight: bold; }
+        .timeline .content h4 { color: var(--primary-color); }
+
+        /* --- 푸터 --- */
+        footer { text-align: center; padding: 40px 20px; background-color: #0a0a0a; margin-top: 40px; }
+        footer a { color: var(--primary-color); text-decoration: none; font-weight: 500; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <div class="logo">K-AgriVision</div>
+            <ul>
+                <li><a href="#application">신청서</a></li>
+                <li><a href="#proposal">제안개요</a></li>
+                <li><a href="#architecture">아키텍처</a></li>
+                <li><a href="#dashboard">대시보드</a></li>
+                <li><a href="#roadmap">로드맵</a></li>
+                <li><a href="#agreement">동의서</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>축산업의 미래, '자율 운영 농장'을 제안합니다</h1>
+        <p>AI 비전 기반 통합 가축 헬스케어 및 생산성 최적화 알고리즘</p>
+        <div class="author">
+            제안자: 김현우 (한국전자기술연구원) <br>
+            <a href="https://github.com/hwkim3330" target="_blank">GitHub: hwkim3330</a>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section id="application">
+            <h2>I. 참가 신청서</h2>
+            <div class="card">
+                <h3>공식 제출 정보</h3>
+                <table>
+                    <tr><td>팀 명</td><td>K-AgriVision</td></tr>
+                    <tr><td>소 속</td><td>한국전자기술연구원 (KETI)</td></tr>
+                    <tr><td>참가자</td><td>김현우</td></tr>
+                    <tr><td>제출 부문</td><td>알고리즘 개발 (기업·단체)</td></tr>
+                    <tr><td>공모 분야</td><td>생산관리, 사양관리, 축산환경개선 (통합 제안)</td></tr>
+                    <tr><td>제안 제목</td><td>AI 비전 기반 통합 가축 헬스케어 및 생산성 최적화 알고리즘</td></tr>
+                    <tr><td>ESG 해당 여부</td><td><span class="highlight">해당</span><br><small>환경(E), 사회(S), 지배구조(G) 전반에 걸친 통합적 가치 창출</small></td></tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="proposal">
+            <h2>II. 제안 개요</h2>
+            <div class="card">
+                <h3>1. 문제 정의: 기술은 존재하나, 시너지는 없었다</h3>
+                <p>현재 스마트 축산 기술은 사양, 환경, 생산 관리 솔루션이 개별적으로 존재하여 '데이터의 섬'에 갇혀 있습니다. 가축의 질병은 단순히 바이러스 문제가 아니라, 미세한 환경 변화와 개체 간 스트레스가 얽힌 복합적인 결과물입니다. 저희는 이 <span class="highlight">'분절된 문제'</span>를 <span class="highlight">'하나의 통합된 비전'</span>으로 풀어내고자 합니다.</p>
+            </div>
+             <div class="card">
+                <h3>2. 핵심 솔루션: AI 비전, 모든 것을 보는 눈</h3>
+                <p>축사 내 카메라를 '모든 것을 보는 눈'으로 활용합니다. 비접촉 AI 비전 기술은 24시간 내내 가축 개체의 미세한 움직임, 자세, 행동 패턴을 데이터로 변환합니다. 이 데이터는 질병의 전조를 예측하고, 환경의 문제를 진단하며, 생산성을 극대화하는 가장 강력한 무기입니다.</p>
+                <p>최종 목표는 단순 모니터링을 넘어, 데이터 스스로 인과관계를 학습하고 최적의 솔루션을 도출하여 농장 전체를 자율적으로 운영하는 <span class="highlight">'자율 운영 농장(Autonomous Farm)'</span>의 핵심 알고리즘을 개발하는 것입니다.</p>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>III. 시스템 아키텍처</h2>
+             <div class="card">
+                <h3>실시간 분석과 심층 학습을 위한 하이브리드 구조</h3>
+                <p>엣지(Edge)에서는 실시간 분석을, 클라우드(Cloud)에서는 심층 학습을 수행하는 효율적인 하이브리드 구조를 제안합니다. 이를 통해 즉각적인 대응과 지속적인 모델 고도화가 동시에 가능해집니다.</p>
+                <div class="flow-diagram">
+                    <div class="flow-box"><strong>축산 현장</strong><br>(카메라, 센서)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box"><strong>엣지 컴퓨팅</strong><br>(실시간 탐지/분류)</div>
+                    <div class="flow-arrow">↔</div>
+                    <div class="flow-box"><strong>클라우드 플랫폼</strong><br>(통합 분석/학습)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box"><strong>사용자</strong><br>(대시보드, 알림)</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard">
+            <h2>IV. 대시보드 프로토타입</h2>
+            <div class="card">
+                <h3>데이터를 이야기로, 통찰력을 행동으로</h3>
+                <p>복잡한 데이터 로그가 아닌, 농장주가 한눈에 상황을 파악하고 즉각적인 의사결정을 내릴 수 있는 직관적인 대시보드를 제안합니다.</p>
+                <div class="dashboard-mockup">
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="label">관심필요 개체</div>
+                            <div class="value warning">8 두</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="label">환경 위험 경고</div>
+                            <div class="value">3 구역</div>
+                        </div>
+                         <div class="kpi-card">
+                            <div class="label">전일 대비 생산성</div>
+                            <div class="value success">+1.2%</div>
+                        </div>
+                    </div>
+                    <div class="farm-layout">
+                        <div class="layout-map">
+                            <h4>축사 현황 맵</h4>
+                            <p style="color: var(--text-muted-color);">(축사 평면도 위 위험 구역 시각화)</p>
+                            <img src="https://i.imgur.com/G5gE5A4.png" alt="Farm Layout" style="max-width:100%; opacity: 0.7; margin-top:20px;">
+                        </div>
+                        <div class="alert-list">
+                            <h4>실시간 알림</h4>
+                            <div class="alert-item danger">
+                                <strong>ID: 돼지-152</strong><br>
+                                <small>사유: 기침 빈도 급증 (호흡기 질환 의심)</small>
+                            </div>
+                            <div class="alert-item warning">
+                                <strong>돈사 3구역</strong><br>
+                                <small>사유: 과밀도로 인한 스트레스 지수 상승</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap">
+            <h2>V. 기술 로드맵 및 비전</h2>
+            <div class="card">
+                <h3>아이디어를 넘어, 지속 가능한 프로덕트로</h3>
+                <p>본 제안은 단발성 경진대회 출품작이 아닌, 실제 산업에 기여하기 위한 장기적인 로드맵을 가지고 있습니다.</p>
+                <ul class="timeline">
+                    <li>
+                        <div class="icon">1</div>
+                        <div class="content">
+                            <h4>Phase 1: 기반 모델 구축 (~2025)</h4>
+                            <p>공공 데이터셋과 영상 데이터를 활용하여 핵심 행동 분류 및 이상탐지 모델의 프로토타입(PoC)을 완성합니다. GitHub를 통해 개발 과정을 투명하게 공개합니다.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">2</div>
+                        <div class="content">
+                            <h4>Phase 2: 멀티모달 AI & 디지털 트윈 (~2026)</h4>
+                            <p>음향 분석 기술을 융합한 멀티모달 AI로 진화하고, 현실과 동일한 가상 농장 '디지털 트윈'을 구축하여 시뮬레이션 기반의 최적화를 시작합니다.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">3</div>
+                        <div class="content">
+                            <h4>Phase 3: 자율 운영 농장 실증 (~2027)</h4>
+                            <p>강화학습 기반의 자율 운영 에이전트를 개발하고, 협력 농가에서 실증 테스트를 진행하여 '자율 운영 농장'의 상업적 가능성을 검증합니다.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="agreement">
+            <h2>VI. 동의서</h2>
+            <div class="card">
+                <h3>개인정보 수집·활용 및 홍보 활용 동의</h3>
+                <p>본 제안서 제출과 관련하여, 제3회 스마트축산 AI 경진대회의 운영을 위한 개인정보 수집 및 이용, 그리고 수상 시 홍보 목적의 제안서 활용에 모두 동의합니다.</p>
+                <br>
+                <p><strong>2025년 7월 15일</strong></p>
+                <p><strong>제출자: 김현우</strong></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2025 K-AgriVision by Hyun-woo Kim (KETI)</p>
+        <p>
+            <a href="https://github.com/hwkim3330" target="_blank">GitHub</a> |
+            <a href="mailto:hwkim3330@example.com">Email</a>
+        </p>
+    </footer>
+
+    <script>
+        // 스크롤 시 섹션이 부드럽게 나타나는 효과
+        const sections = document.querySelectorAll('section');
+        const options = {
+            root: null,
+            threshold: 0.1,
+            rootMargin: "0px"
+        };
+        const observer = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            });
+        }, options);
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
